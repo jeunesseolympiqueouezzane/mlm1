@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>$MLM</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Top right buttons -->
+    <div class="top-buttons">
+        <img src="img/x logo.png" alt="X" class="clickable-logo">
+        <img src="img/dex.png" alt="DexScreener" class="clickable-logo">
+    </div>
+
+    <!-- Sint images in various positions -->
+    <div class="sint-top-left">
+        <img src="img/this sint.png" alt="Sint" class="sint-small">
+    </div>
+    
+    <div class="sint-top-left-high">
+        <img src="img/this sint.png" alt="Sint" class="sint-tiny">
+    </div>
+    
+    
+    
+    <div class="sint-middle-left">
+        <img src="img/this sint.png" alt="Sint" class="sint-small">
+    </div>
+    
+    <div class="sint-middle-right">
+        <img src="img/this sint.png" alt="Sint" class="sint-small">
+    </div>
+    
+    <div class="sint-far-left">
+        <img src="img/this sint.png" alt="Sint" class="sint-tiny">
+    </div>
+    
+    <div class="sint-far-right">
+        <img src="img/this sint.png" alt="Sint" class="sint-large">
+    </div>
+    
+    <div class="sint-top-right-corner">
+        <img src="img/this sint.png" alt="Sint" class="sint-medium">
+    </div>
+
+    <!-- MLM4 images in strategic positions -->
+    <div class="mlm-top-left">
+        <img src="img/Mlm4.png" alt="MLM4" class="mlm-medium">
+    </div>
+    
+    <div class="mlm-top-left-high">
+        <img src="img/Mlm4.png" alt="MLM4" class="mlm-small">
+    </div>
+    
+    <div class="mlm-top-right">
+        <img src="img/Mlm4.png" alt="MLM4" class="mlm-small">
+    </div>
+    
+    <div class="mlm-top-right-high">
+        <img src="img/Mlm4.png" alt="MLM4" class="mlm-tiny">
+    </div>
+    
+    <div class="mlm-center-left">
+        <img src="img/Mlm4.png" alt="MLM4" class="mlm-tiny">
+    </div>
+    
+    <div class="mlm-center-right">
+        <img src="img/Mlm4.png" alt="MLM4" class="mlm-large">
+    </div>
+
+    <!-- Recruit images in random places -->
+   
+    <div class="recruit-top-left-corner">
+        <img src="img/Recruit 4.png" alt="Recruit" class="recruit-tiny">
+    </div>
+    
+   
+    
+    <div class="recruit-bottom-right">
+        <img src="img/Recruit 4.png" alt="Recruit" class="recruit-small">
+    </div>
+    
+    <div class="recruit-left-bottom">
+        <img src="img/Recruit 4.png" alt="Recruit" class="recruit-small">
+    </div>
+    
+    <div class="recruit-right-middle">
+        <img src="img/Recruit 4.png" alt="Recruit" class="recruit-tiny">
+    </div>
+    
+    <div class="recruit-top-left">
+        <img src="img/Recruit 4.png" alt="Recruit" class="recruit-medium">
+    </div>
+    
+    <div class="recruit-bottom-left">
+        <img src="img/Recruit 4.png" alt="Recruit" class="recruit-large">
+    </div>
+    
+    <div class="recruit-far-right">
+        <img src="img/Recruit 4.png" alt="Recruit" class="recruit-tiny">
+    </div>
+
+    <main>
+        <div class="image-container">
+            <img src="img/1920x1080.jpg" 
+                 alt="$MLM - Multi-Level Marketing with Golden Pyramids" 
+                 class="main-image">
+        </div>
+    </main>
+
+    <!-- Bottom members count -->
+    <div class="members-count">
+        <span class="members-text">Members: <span id="holder-count">Loading...</span></span>
+    </div>
+
+    <!-- Bottom right sint image -->
+    <div class="bottom-right-image">
+        <img src="img/this sint.png" alt="Sint" class="sint-logo">
+    </div>
+
+    <script>
+        // API configuration
+        const TOKEN_ADDRESS = 'GjAUSL7HiPDDAKFPKoXxteCmqmd2M4VSKrETYqo2pump';
+        const HELIUS_API_KEY = '4bad7e04-cde4-49fd-b408-408e4bcc909b';
+        let currentHolders = 0;
+
+        // Animate number counting
+        function animateNumber(element, start, end, duration = 2000) {
+            const startTime = performance.now();
+            const diff = end - start;
+
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                // Easing function (ease-out)
+                const easeOut = 1 - Math.pow(1 - progress, 3);
+                const current = Math.round(start + diff * easeOut);
+                
+                element.textContent = current.toLocaleString();
+                
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                }
+            }
+            
+            requestAnimationFrame(update);
+        }
+
+        async function fetchHolderCount() {
+            try {
+                console.log('Fetching holder count for:', TOKEN_ADDRESS);
+                
+                // Use Helius API to get all token accounts for this mint
+                const response = await fetch(`https://mainnet.helius-rpc.com/?api-key=${HELIUS_API_KEY}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        jsonrpc: '2.0',
+                        id: 1,
+                        method: 'getProgramAccounts',
+                        params: [
+                            'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
+                            {
+                                encoding: 'jsonParsed',
+                                filters: [
+                                    {
+                                        dataSize: 165
+                                    },
+                                    {
+                                        memcmp: {
+                                            offset: 0,
+                                            bytes: TOKEN_ADDRESS
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                console.log('Helius API Response:', data);
+                
+                if (data.result) {
+                    // Count accounts with non-zero token balances
+                    const holders = data.result.filter(account => {
+                        const tokenAmount = account.account.data.parsed.info.tokenAmount;
+                        return tokenAmount && parseFloat(tokenAmount.amount) > 0;
+                    });
+                    
+                    const holderCount = holders.length;
+                    console.log(`Found ${holderCount} token holders`);
+                    
+                    const holdersElement = document.getElementById('holder-count');
+                    
+                    if (holderCount !== currentHolders) {
+                        animateNumber(holdersElement, currentHolders, holderCount);
+                        currentHolders = holderCount;
+                    } else {
+                        holdersElement.textContent = holderCount.toLocaleString();
+                    }
+                } else {
+                    throw new Error('No token account data found');
+                }
+
+            } catch (error) {
+                console.error('API failed:', error);
+                
+                const holdersElement = document.getElementById('holder-count');
+                holdersElement.textContent = 'Loading...';
+            }
+        }
+
+        // Fetch holder count when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Page loaded, fetching holder count...');
+            currentHolders = 0;
+            fetchHolderCount();
+        });
+        
+        // Update every 3 seconds
+        setInterval(() => {
+            console.log('Scheduled update...');
+            fetchHolderCount();
+        }, 3000);
+    </script>
+</body>
+</html>
