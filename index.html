@@ -125,6 +125,25 @@
         const HELIUS_API_KEY = '4bad7e04-cde4-49fd-b408-408e4bcc909b';
         let currentHolders = 0;
 
+        // Button click functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            // X (Twitter) button functionality
+            const xButton = document.querySelector('.top-buttons img[alt="X"]');
+            if (xButton) {
+                xButton.addEventListener('click', () => {
+                    window.open('https://x.com/home', '_blank');
+                });
+            }
+
+            // DexScreener button functionality
+            const dexButton = document.querySelector('.top-buttons img[alt="DexScreener"]');
+            if (dexButton) {
+                dexButton.addEventListener('click', () => {
+                    window.open('https://dexscreener.com/', '_blank');
+                });
+            }
+        });
+
         // Animate number counting
         function animateNumber(element, start, end, duration = 2000) {
             const startTime = performance.now();
